@@ -1,0 +1,55 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Agile Board {% endblock %}
+{% block extrahead %}
+<script src="{% static 'js/board.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}
+{%block content%}
+    <a href="{% url 'addcard' %}" class=""><button type="button" class="btn btn-success">Add card </button></a>
+<div class="container-fluid">
+
+        <ul class="list-group col-md-4" id="column_0">
+            <li class="list-group-item" id=""><h3>TO DO</h3></li>
+          {% for card in object_list %}
+            {% if card.status == 0 %}
+                <li class="list-group-item" id="card_{{ card.id }}">
+                    <a  href="{% url 'editcard' pk=card.id %}">{{ card.name }}</a>
+                    <button id="button_right_{{ card.id }}" onclick="change_status({{ card.id }}, '1')"> >>> </button>
+                    <button class="btn-xs btn-danger delete-card delete_{{ card.id }}" value="{{ card.id }}">Delete</button>
+                </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+
+        <ul class="list-group col-md-4" id="column_1">
+            <li class="list-group-item" id=""><h3>In Progress</h3></li>
+          {% for card in object_list %}
+            {% if card.status == 1 %}
+                <li class="list-group-item" id="card_{{ card.id }}">
+                    <button id="button_left_{{ card.id }}" onclick="change_status({{ card.id }}, '0')"> <<< </button>
+                    <a  href="{% url 'editcard' pk=card.id %}">{{ card.name }}</a>
+                    <button id="button_right_{{ card.id }}" onclick="change_status({{ card.id }}, '2')"> >>> </button>
+                    <button class="btn-xs btn-danger delete-card delete_{{ card.id }}" value="{{ card.id }}">Delete</button>
+                </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+
+        <ul class="list-group col-md-4" id="column_2">
+                    <li class="list-group-item" id=""><h3>Done</h3></li>
+          {% for card in object_list %}
+            {% if card.status == 2 %}
+                <li class="list-group-item" id="card_{{ card.id }}">
+                    <button id="button_left_{{ card.id }}" onclick="change_status({{ card.id }}, '1')"> <<< </button>
+                    <a  href="{% url 'editcard' pk=card.id %}">{{ card.name }}</a>
+                    <button class="btn-xs btn-danger delete-card delete_{{ card.id }}" value="{{ card.id }}">Delete</button>
+                </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+</div>
+
+{% endblock%}
